@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  python-agent-service:
+    build:
+      context: ./python_agent_service
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - AZURE_OPENAI_ENDPOINT=https://your-azure-openai.openai.azure.com/
+      - AZURE_OPENAI_API_KEY=your-actual-key
+      - AZURE_OPENAI_DEPLOYMENT_NAME=gpt-4o
+      - DOTNET_SERVICE_URL=http://dotnet-data-service:80/api/fraud-data
+    depends_on:
+      - dotnet-data-service
+
+  dotnet-data-service:
+    build:
+      context: ./dotnet_data_service
+      dockerfile: Dockerfile
+    ports:
+      - "5000:80"
